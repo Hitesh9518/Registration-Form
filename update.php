@@ -330,7 +330,7 @@
             elseif (strlen ($password) != 8) {  
             $passwordErr = "Mobile no must contain 8.";  
             }else{
-                $password = $_POST['password'];
+                $password = md5($_POST['password']);
               }  
         }
 
@@ -344,7 +344,7 @@
             elseif (strlen ($cpassword) != 8) {  
             $cpasswordErr = "Mobile no must contain 8.";  
             }else{
-                $cpassword = $_POST['cpassword'];
+                $cpassword = md5($_POST['cpassword']);
               } 
         }
 
