@@ -133,7 +133,7 @@ require 'connection.php';
             elseif (strlen ($password) != 8) {  
             $passwordErr = "Mobile no must contain 8.";  
             }else{
-                $password = $_POST['password'];
+                $password =md5 ($_POST['password']);
               }  
         }
 
@@ -147,7 +147,7 @@ require 'connection.php';
             elseif (strlen ($cpassword) != 8) {  
             $cpasswordErr = "Mobile no must contain 8.";  
             }else{
-                $cpassword = $_POST['cpassword'];
+                $cpassword =md5 ($_POST['cpassword']);
               } 
         }
 
@@ -170,7 +170,7 @@ require 'connection.php';
         // $cpassword=$_POST['cpassword'];
 
                 if($password == $cpassword && $password != ""){
-                    $insert = "insert into company values(NULL,'$fname','$mname','$lname','$dob','$gender','$hobbies','$email','$mobile','$address','$city','$state','$country','$pincode','$password');";
+                    $insert = "insert into company values(NULL,'$fname','$mname','$lname','$dob','$gender','$hobbies','$email','$mobile','$address','$city','$state','$country','$pincode','$password',1);";
 
                     mysqli_query($con,$insert);
 
@@ -321,7 +321,7 @@ require 'connection.php';
             <th>Operations</th>
             </tr>";
 
-            $result = mysqli_query($con,"select * from company");
+            $result = mysqli_query($con,"select * from company where status = '1'");
             while($row=mysqli_fetch_assoc($result)){
 
                 echo "<tr>";
@@ -339,9 +339,17 @@ require 'connection.php';
                 echo "<td>".$row['country']."</td>";
                 echo "<td>".$row['pincode']."</td>";
                 echo "<td>".$row['password']."</td>";
-                echo "<td>"."<a href ='update.php?id=$row[id]'><button type='button'>Edit</button></a>".' '."<a href ='delete.php?id=$row[id]'><button type='button'>Delete</button></a>"."</td>";
+                echo "<td>"."<a href ='update.php?id=$row[id]'><button type='button'>Edit</button></a>".' '."<a href ='delete.php?id=$row[id]'><button type='button'>Permanent Delete</button></a>".' '."<a href ='?id=$row[id]'><button type='button'>Delete</button></a>"."</td>";
             }
         ?></table>
     </center>
 </body>
 </html>
+
+<?php
+    if(isset($_GET['id']) && $_GET['id'] > 0){
+        $id=mysqli_real_escape_string($con,$_GET['id']);
+        mysqli_query($con,"UPDATE company SET status='-1' where id='$id'");
+        echo '<script>window.location.href="add.php";</script>';
+    }
+?>
